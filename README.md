@@ -41,4 +41,5 @@ Investigate integration with real-time traffic data.
 This project is developed for educational purposes. Its predictions have not yet been validated for real-world traffic management.
 
 👨‍💻 Author
+
 Apoorva C
