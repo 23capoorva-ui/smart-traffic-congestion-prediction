@@ -630,7 +630,7 @@ def init_database():
             # Bengaluru
             ("Bengaluru", "Silk Board Junction", "Vehicle Breakdown", "Moderate", "Stalled commercial lorry on flyover ramp causing single-lane backup.", "Traffic Volunteer", t1, 4.0, "Active"),
             ("Bengaluru", "Hebbal Flyover", "Road Construction", "Low", "Asphalt pothole repair on extreme left lane towards airport.", "Commuter", t2, 4.0, "Active"),
-            ("Bengaluru", "Banashankari 3rd Stage Junction", "Pothole Hazard", "Moderate", "Due to water pipe repair old road has deep potholes causing vehicle slowdown.", "Apoorva", t1, 4.0, "Active"),
+            ("Bengaluru", "Banashankari 3rd Stage Junction", "Pothole Hazard", "Moderate", "Due to water pipe repair old road has deep potholes causing vehicle slowdown.", "Citizen Reporter", t1, 4.0, "Active"),
             # Mumbai
             ("Mumbai", "Western Express Highway / Andheri Flyover", "Accident / Collision", "Severe", "Two-car collision on southbound carriageway; emergency crane on site.", "Mumbai Traffic Police Feed", t1, 4.0, "Active"),
             ("Mumbai", "Dadar TT Circle", "Waterlogging", "Moderate", "Water accumulation near signal causing slow-moving traffic.", "Commuter", t2, 4.0, "Active"),

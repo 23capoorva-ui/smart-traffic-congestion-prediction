@@ -716,16 +716,30 @@ if navigation == "Overview & Analytics":
 
         st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
-        # 2. Honest Academic Notice
-        st.info(f"""
-            **Historical Baseline Dataset Notice for {selected_city}:**
-            
-            The project's historical empirical observation baseline (`Bengaluru_Traffic_Condition_Dataset.xlsx`, 2,100 records) covers **Bengaluru**.
-            
-            In strict compliance with academic research integrity and zero-fabrication standards, historical time-series graphs (hourly speed curves, queue lengths, and congestion index profiles) are withheld for **{selected_city}** rather than filled with synthetic or fabricated numbers.
-            
-            When an empirical observation dataset for {selected_city} is added to the system, historical machine learning analytics will activate automatically.
-        """)
+        # 2. Honest Academic Notice & Dataset Instructions
+        if selected_city == "Bengaluru":
+            st.warning("""
+                **Empirical Baseline Dataset Missing (`Bengaluru_Traffic_Condition_Dataset.xlsx`)**
+
+                To comply with copyright laws and open-source licensing standards, the raw empirical dataset is not bundled in this public repository (the upstream repository retains all rights).
+
+                **How to add the dataset:**
+                1. Download `Bengaluru_Traffic_Condition_Dataset.xlsx` directly from the original author's repository:  
+                   [https://github.com/aswinmangatt/Bengaluru-Traffic-Analysis](https://github.com/aswinmangatt/Bengaluru-Traffic-Analysis) (under `data/Bengaluru_Traffic_Condition_Dataset.xlsx`)
+                2. Place the file into the project root directory:  
+                   `./Bengaluru_Traffic_Condition_Dataset.xlsx`
+                3. Refresh this page or restart NEXTRAFFX. The application will automatically detect the dataset, seed the SQLite database, and activate historical analytics and ML models.
+            """)
+        else:
+            st.info(f"""
+                **Historical Baseline Dataset Notice for {selected_city}:**
+                
+                The project's historical empirical observation baseline (`Bengaluru_Traffic_Condition_Dataset.xlsx`, 2,100 records) covers **Bengaluru**.
+                
+                In strict compliance with academic research integrity and zero-fabrication standards, historical time-series graphs (hourly speed curves, queue lengths, and congestion index profiles) are withheld for **{selected_city}** rather than filled with synthetic or fabricated numbers.
+                
+                When an empirical observation dataset for {selected_city} is added to the system, historical machine learning analytics will activate automatically.
+            """)
 
         # 3. Two-column section: Monitored Corridors Directory + Active Incidents Breakdown
         c_dir, c_inc = st.columns([1.5, 1.5])
@@ -1432,7 +1446,21 @@ elif navigation == "Congestion ML Estimator":
     """, unsafe_allow_html=True)
 
     # Check data sufficiency
-    if not pred_res.get("has_prediction", True):
+    if city_df.empty:
+        st.warning(f"""
+            **Baseline Observation Dataset Missing for {selected_city}**
+            
+            Predictive modeling requires the empirical observation dataset (`Bengaluru_Traffic_Condition_Dataset.xlsx`).
+            In accordance with copyright laws and open-source licensing compliance, this dataset is not bundled in the public GitHub repository.
+
+            **How to add the dataset:**
+            1. Download `Bengaluru_Traffic_Condition_Dataset.xlsx` from the original author's repository:  
+               [https://github.com/aswinmangatt/Bengaluru-Traffic-Analysis](https://github.com/aswinmangatt/Bengaluru-Traffic-Analysis) (under `data/Bengaluru_Traffic_Condition_Dataset.xlsx`)
+            2. Place the downloaded Excel file into the project root directory:  
+               `./Bengaluru_Traffic_Condition_Dataset.xlsx`
+            3. Restart NEXTRAFFX. The system will automatically detect the dataset, seed SQLite, and enable predictive estimation.
+        """)
+    elif not pred_res.get("has_prediction", True):
         st.warning(f"""
              **Historical Data Unavailable for {pred_hour:02d}:00**
             
@@ -2061,7 +2089,7 @@ elif navigation == "Incident Reports & Live Feed":
                 inc_severity = st.select_slider("Severity Level", options=["Low", "Moderate", "Severe"], value="Moderate")
                 inc_expiry = st.selectbox("Report Expiry Window", [2.0, 4.0, 8.0, 24.0], format_func=lambda x: f"{int(x)} hours")
                 inc_desc = st.text_area("Description & Details", placeholder="e.g. Repair work on left lane causing heavy slowdown...")
-                inc_reporter = st.text_input("Reporter Name / Affiliation", placeholder="e.g. Apoorva, Commuter, Traffic Volunteer")
+                inc_reporter = st.text_input("Reporter Name / Affiliation", placeholder="e.g. Commuter, Traffic Volunteer, Citizen")
                 is_anon = st.checkbox("Submit anonymously (hide reporter name)")
 
                 submitted = st.form_submit_button("Submit Incident to SQLite")

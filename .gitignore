@@ -18,6 +18,15 @@ venv.bak/
 *.sqlite3
 traffic_system.db
 
+# Raw Third-Party Datasets (Excluded for licensing compliance - see README.md)
+*.xlsx
+Bengaluru_Traffic_Condition_Dataset.xlsx
+
+# Local user submissions and test CSV exports (Kept local for privacy)
+incident_reports.csv
+user_feedback.csv
+*.csv
+
 # Environment Variables & Secrets
 .env
 .env.*

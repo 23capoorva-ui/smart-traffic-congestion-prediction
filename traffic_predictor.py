@@ -233,6 +233,40 @@ class TrafficPredictor:
         if self.trained_city != self.city:
             self._initialize_engine()
 
+        # Check if historical dataset is available for this city
+        df_check = db_manager.get_city_observations(self.city)
+        if df_check.empty:
+            return {
+                "city": self.city,
+                "hotspot_name": hotspot_name,
+                "hour": hour,
+                "day_of_week": day_of_week,
+                "is_historical_window": (8 <= hour <= 22),
+                "has_prediction": False,
+                "is_ml_model": False,
+                "engine_type": "Dataset Not Installed",
+                "base_score": None,
+                "score_std_err": None,
+                "score_interval_95": None,
+                "incident_impact": 0.0,
+                "final_score": None,
+                "base_speed": None,
+                "predicted_speed": None,
+                "level": "Unavailable",
+                "level_color": "#94a3b8",
+                "metrics": {},
+                "is_stale": False,
+                "incident_details": [],
+                "data_source_type": "Historical Data Missing",
+                "data_source": "Dataset not found",
+                "message": (
+                    f"Historical baseline observation dataset is not installed for {self.city}. "
+                    "In compliance with copyright and licensing standards, the raw dataset is not bundled in this public repository. "
+                    "To enable predictive modeling, download 'Bengaluru_Traffic_Condition_Dataset.xlsx' from "
+                    "https://github.com/aswinmangatt/Bengaluru-Traffic-Analysis and place it in the project root directory."
+                )
+            }
+
         # 1. Query SQLite for active unexpired crowdsourced incident reports
         incidents_df = db_manager.get_city_incidents(self.city, include_archived=False)
         active_incidents = incidents_df[
