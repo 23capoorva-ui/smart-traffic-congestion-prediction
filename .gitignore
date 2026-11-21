@@ -1,0 +1,59 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Local runtime databases
+*.db
+*.sqlite
+*.sqlite3
+traffic_system.db
+
+# Environment Variables & Secrets
+.env
+.env.*
+*.env
+secrets.toml
+.streamlit/credentials.toml
+
+# IDE & Editor Configuration
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Temporary, Backup & Log Files
+app_backup.py
+app_backup_clean.py
+*.bak
+*.tmp
+*.temp
+*.log
+nul
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Testing & Coverage Caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/

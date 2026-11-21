@@ -1,0 +1,6 @@
+Timestamp,Location,Incident_Type,Severity,Description,Reporter,Status
+2026-11-15 14:45,Banashankari 3rd Stage Junction,Road Construction,Moderate,"Due to the repair of the old road which has so many potholes in it the road has been blocked
+",Apoorva,Active
+2026-11-14 17:30,Silk Board Junction,Vehicle Breakdown,Moderate,Stalled BMTC bus near ramp causing slow movement towards BTM.,Commuter,Active
+2026-11-14 18:15,Hebbal Flyover,Road Maintenance,Low,Pothole patch work on airport corridor left lane.,Traffic Warden,In Progress
+2026-11-14 18:45,Marathahalli Bridge,Signal Malfunction,Severe,Manual traffic control active due to timer sync issue.,Citizen,Under Review
