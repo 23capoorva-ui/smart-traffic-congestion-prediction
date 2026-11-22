@@ -490,36 +490,41 @@ def init_database():
     # Seed Bengaluru Excel if city_observations for Bengaluru is empty
     c.execute("SELECT COUNT(*) FROM city_observations WHERE city = 'Bengaluru'")
     beng_count = c.fetchone()[0]
-    if beng_count == 0 and os.path.exists(BENGALURU_EXCEL):
-        try:
-            beng_df = pd.read_excel(BENGALURU_EXCEL)
-            for _, r in beng_df.iterrows():
-                c.execute("""
+    if beng_count == 0:
+        if os.path.exists(BENGALURU_EXCEL):
+            try:
+                beng_df = pd.read_excel(BENGALURU_EXCEL)
+                beng_rows = []
+                for _, r in beng_df.iterrows():
+                    beng_rows.append((
+                        "Bengaluru",
+                        str(r.get("hotspot_id", "")),
+                        str(r.get("hotspot_name", "")),
+                        float(r.get("latitude", 12.9716)),
+                        float(r.get("longitude", 77.5946)),
+                        int(r.get("hour", 8)),
+                        str(r.get("day_of_week", "Monday")),
+                        float(r.get("traffic_volume", 500)),
+                        float(r.get("average_speed_kmh", 30)),
+                        float(r.get("congestion_score", 30)),
+                        str(r.get("congestion_level", "Moderate")),
+                        float(r.get("average_waiting_time_min", 3.0)),
+                        float(r.get("average_queue_length", 8.0)),
+                        "Bengaluru Historical Dataset"
+                    ))
+                c.executemany("""
                 INSERT INTO city_observations (
                     city, hotspot_id, hotspot_name, latitude, longitude,
                     hour, day_of_week, traffic_volume, average_speed_kmh,
                     congestion_score, congestion_level, average_waiting_time_min,
                     average_queue_length, source
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    "Bengaluru",
-                    str(r.get("hotspot_id", "")),
-                    str(r.get("hotspot_name", "")),
-                    float(r.get("latitude", 12.9716)),
-                    float(r.get("longitude", 77.5946)),
-                    int(r.get("hour", 8)),
-                    str(r.get("day_of_week", "Monday")),
-                    float(r.get("traffic_volume", 500)),
-                    float(r.get("average_speed_kmh", 30)),
-                    float(r.get("congestion_score", 30)),
-                    str(r.get("congestion_level", "Moderate")),
-                    float(r.get("average_waiting_time_min", 3.0)),
-                    float(r.get("average_queue_length", 8.0)),
-                    "Bengaluru Historical Dataset"
-                ))
-            conn.commit()
-        except Exception as e:
-            print("Error loading Bengaluru Excel to SQLite:", e)
+                """, beng_rows)
+                conn.commit()
+            except Exception as e:
+                print("Error loading Bengaluru Excel to SQLite:", e)
+        else:
+            print("Notice: Bengaluru_Traffic_Condition_Dataset.xlsx not found. Bengaluru historical observations remain unpopulated until the dataset is provided.")
 
 
     # Permanent Seeder: Ensure every city has its full 2,100 records

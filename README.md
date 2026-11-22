@@ -246,20 +246,25 @@ To deploy NEXTRAFFX to **Streamlit Community Cloud** (free tier):
 4. **Cloud Persistence Disclosure:**  
    Streamlit Community Cloud runs containers with ephemeral filesystems. SQLite databases (`traffic_system.db`) and citizen reports are stored locally in the container and reset when the container restarts. Permanent cross-session storage on cloud hosting would require an external cloud database (e.g. Supabase, AWS RDS, or PostgreSQL).
 5. **Dataset Handling on Cloud:**  
-   Since `Bengaluru_Traffic_Condition_Dataset.xlsx` is excluded from Git for licensing compliance, the cloud deployment will display the dataset-missing guidance notice for Bengaluru historical time-series until the file is mounted or provided via a cloud storage URL. Monitored corridor directories, live OSRM road routing, map visualization, ambulance dispatch simulation, and citizen incident logging remain 100% operational.
+   Because `Bengaluru_Traffic_Condition_Dataset.xlsx` is excluded from GitHub for licensing compliance (its upstream redistribution licence is not confirmed), cloud deployments such as Streamlit Community Cloud will not display historical Bengaluru analytics unless the dataset is supplied through a supported source (such as local self-hosting or private storage mounts). In strict compliance with academic and research integrity, historical time-series graphs and historical congestion scores for Bengaluru are withheld rather than filled with fabricated numbers. All other core capabilities—including full GIS corridor maps, live OSRM road routing, turn-by-turn navigation, ambulance dispatch simulation, and citizen hazard logging—remain 100% operational. See Section 8 for instructions on downloading and setting up the dataset for local use.
 
 ---
 
-## 14. Known Limitations
+## 14. Known Limitations & Dependencies
 
-1. **Historical Dataset Operating Hours:**  
-   The empirical baseline dataset covers the hours between 08:00 and 22:00. In strict accordance with academic integrity, predictions and historical time-series graphs are withheld for off-peak hours (23:00 to 07:59) rather than populated with fabricated values.
+1. **Historical Dataset Operating Hours & Cloud Availability:**  
+   The empirical baseline dataset covers the daytime/evening hours between 08:00 and 22:00. In strict accordance with academic integrity, predictions and historical time-series graphs are withheld for off-peak hours (23:00 to 07:59) rather than populated with fabricated values. Furthermore, public cloud deployments will not display historical Bengaluru analytics unless the dataset is supplied through a supported source.
 2. **Physical Sensor Integration:**  
-   In compliance with the ₹0 budget constraint, this prototype does not license commercial live GPS probe feeds (e.g., TomTom / Google Maps Traffic API) or municipal inductive loop traffic camera networks.
-3. **Public OSRM Rate Limits:**  
-   Road-network route geometry relies on the public Open Source Routing Machine demo server (`router.project-osrm.org`) with client-side caching (`@st.cache_data`). High-frequency bulk routing should be hosted on a local OSRM Docker instance.
-4. **Emergency Dispatch Simulation:**  
-   The emergency corridor simulation is strictly an academic demonstration and is **NOT** connected to real 108/112 municipal ambulance dispatch systems or physical traffic signal hardware.
+   In compliance with the zero-cost budget constraint, this prototype does not license commercial live GPS probe feeds (e.g., TomTom or Google Maps Traffic API) or municipal inductive loop traffic camera networks.
+3. **External Services & Network Connectivity:**  
+   Road-network route geometry and map tiles rely on external public services: Open Source Routing Machine (`router.project-osrm.org`) for road-network routing and OpenStreetMap tile servers for GIS cartography. Routing, map loading, and recalculation depend on external server availability and network connectivity.
+4. **Browser Permissions & Client APIs:**  
+   Live navigation, voice guidance, and siren notifications depend on client-side browser permissions and modern Web API support:
+   - **GPS Tracking:** Real-time turn-by-turn navigation requires explicit user permission for the HTML5 Geolocation API (`navigator.geolocation`).
+   - **Audio Siren & Speech:** Spoken voice prompts (Web Speech API) and emergency siren audio (Web Audio API) require initial user interaction (such as clicking 'Start Navigation' or 'Sound Siren') in accordance with modern browser autoplay policies.
+   - **Haptic Alerts:** Vibration notifications depend on device and browser support for the HTML5 Vibration API.
+5. **Emergency Dispatch Simulation:**  
+   Ambulance alerts, priority green-wave corridors, and approaching vehicle broadcasts are strictly educational simulations and research demonstrations, **NOT** actual emergency-service or 108/112 municipal integration, and do not interface with real hospitals or physical traffic signal hardware controllers.
 
 ---
 
