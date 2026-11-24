@@ -1252,7 +1252,26 @@ elif navigation == "Route Guidance & Alternatives":
 
     # Fetch OSRM Route
     with st.spinner("Fetching real road geometry from Open Source Routing Machine..."):
-        route_data = osrm_router.fetch_osrm_routes(orig_lat, orig_lon, dest_lat, dest_lon)
+        route_data = osrm_router.fetch_osrm_routes(
+            orig_lat, orig_lon, dest_lat, dest_lon, city=selected_city
+        )
+
+    # Estimate the selected corridor pair's historical/demo traffic level.
+    # OSRM supplies road geometry and free-flow duration, not live congestion.
+    route_obs = city_df[
+        (city_df["hour"] == travel_h)
+        & (city_df["hotspot_name"].isin([orig, dest]))
+    ] if not city_df.empty else pd.DataFrame()
+    if not route_obs.empty:
+        route_score = float(route_obs["congestion_score"].mean())
+        route_level = "Low" if route_score < 25 else ("Moderate" if route_score < 42 else "High")
+        route_level_color = {"Low": "#10b981", "Moderate": "#f59e0b", "High": "#ef4444"}[route_level]
+        route_traffic_label = f"{route_level} (index {route_score:.1f}/100)"
+        route_traffic_basis = "Historical/demo corridor observations"
+    else:
+        route_traffic_label = "Unavailable for selected hour"
+        route_level_color = "#94a3b8"
+        route_traffic_basis = "No observation for this hour"
 
     prim_route = route_data["primary"]
     alt_route = route_data["alternative"]
@@ -1282,11 +1301,11 @@ elif navigation == "Route Guidance & Alternatives":
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                     <span style="color: #94a3b8;">Calculation Basis:</span>
-                    <span>OSRM Free-Flow Speed Limits</span>
+                    <span>{route_traffic_basis}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span style="color: #94a3b8;">Traffic Condition:</span>
-                    <span class="badge badge-low">Free-Flow Network Estimate</span>
+                    <span class="badge" style="background: rgba(255,255,255,0.1); color: {route_level_color};">{route_traffic_label}</span>
                 </div>
             </div>
         """, unsafe_allow_html=True)
