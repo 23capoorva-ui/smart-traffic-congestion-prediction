@@ -548,6 +548,14 @@ def init_database():
         "Kolkata": {"base_vol": 610, "base_score": 33.2, "free_speed": 44.0}
     }
 
+    # Bengaluru uses the original Excel dataset when supplied. If it is absent,
+    # create a clearly labelled synthetic demonstration baseline so every dashboard
+    # module remains functional in deployments such as Streamlit Community Cloud.
+    if beng_count == 0:
+        CITY_PROFILES["Bengaluru"] = {
+            "base_vol": 640, "base_score": 33.0, "free_speed": 46.0
+        }
+
     import random
     rng = random.Random(42)
 
@@ -608,7 +616,11 @@ def init_database():
                             city_name, h_id, h_name, h_lat, h_lon,
                             h, day, float(vol), float(speed),
                             float(score), level, float(delay), float(queue),
-                            f"{city_name} Historical Observation Baseline"
+                            (
+                                "Bengaluru Synthetic Demonstration Baseline"
+                                if city_name == "Bengaluru"
+                                else f"{city_name} Synthetic Demonstration Baseline"
+                            )
                         ))
 
             c.executemany("""
